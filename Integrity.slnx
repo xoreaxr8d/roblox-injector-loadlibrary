@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Integrity/Integrity.vcxproj" Id="48935e52-8fc1-46c5-a6cd-8d70bd8b9b21" />
+</Solution>
