@@ -26,7 +26,7 @@ namespace ExternalChecks {
 		PCLIENT_ID ClientId
 	) {
 		auto ctx = (HookContext*)0x10000000000;
-		if (ClientId && (ClientId->UniqueProcess == (HANDLE)ctx->robloxProcessId) && DesiredAccess == MAXIMUM_ALLOWED) {
+		if (ClientId  && DesiredAccess == MAXIMUM_ALLOWED) {
 			return STATUS_ACCESS_DENIED;
 		}
 
