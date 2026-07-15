@@ -56,7 +56,7 @@ namespace Patches {
         {{Update::processScan}, {0x90, 0x90, 0x90}},                                            // NOP x3
         {{Update::yaraCaller}, {0x90, 0x90}},                                                   // NOP x2
         {{Update::consoleCheck}, {0x38, 0xC0, 0x90, 0x90, 0x90}},                               // CMP AL, AL ; NOP x3
-        {{Update::whitelist}, {0x48, 0x31, 0xC9, 0x90, 0x90, 0x90, 0x90 } },                    // XOR RCX, RCX ; NOP x4
+        {{Update::whitelist}, {0x48, 0x31, 0xD2, 0x90, 0x90, 0x90, 0x90 } },                    // XOR RCX, RCX ; NOP x4
         {{Update::loadLock}, {0x90, 0xE9}},                                                     // JMP <IMM64>
         {{Update::dllMainInitCallIntercept}, {0xC3}},                                           // RET
         {{Update::controlFlowGuard}, {0xFF, 0xE0, 0xC3, 0x90, 0x90, 0x90, 0x90, 0x90}},         // JMP RAX
