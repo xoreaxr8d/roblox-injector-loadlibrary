@@ -12,58 +12,58 @@ struct Patch {
 
 namespace Patches {
     namespace Update {
-        inline uintptr_t generalIntegrity = 0xCF3082; // main check, runs every ~5 seconds
+        inline uintptr_t generalIntegrity = 0x2AD5E9; // main check, runs every ~5 seconds
         inline std::vector<uintptr_t> subIntegrityJNZ = {
-            0xCDB2EB, 0xCE4F13, 0xE572F1,
-            0xD1552D, 0xD5AAEF, 0xDCD7DD,
-            0xDAD7F4, 0xDDC388, 0xCE02CA,
-            0xE643D5, 0xE65632, 0xE65F4B,
-            0xCF6F28, 0xDAC68E, 0xDC9CE7
+            0x1A9712, 0x1DCB8C, 0x1E05C7,
+            0x24C7BA, 0x1E7617, 0x2D9659,
+            0x370AA3, 0x1BEB1F, 0x1D8897,
+            0x1ECDF9, 0x21C0B2, 0x1E9001,
+            0x24D0D9, 0x24E423, 0x24D834,
+            0x3A4AD4
+
         };
         inline std::vector<uintptr_t> staticIntegritycj = { // " why not all? " cuz we are patching function callers away which saves us alot
-            0x4E76B4, 0x62702F, 0xE64453,
-            0xE0FC27, 0xCD0409, 0xCDA6C7,
-            0xCDFC65, 0xD0E5BC, 0xCD100A,
-            0xCD1DAD, 0xCD2E43, 0xCD3BB7,
-            0xCD55E4, 0xCD65B9, 0xCD6571,
-            0xCD4E5F, 0xCD9F66, 0xCDACB6,
-            0xCD884B, 0xCD9D63, 0xD25234,
-            0xDABFA9, 0xDD289E, 0x5F7C8B,
+            0x19E54C, 0x19F45E, 0x1A1DD0, 0x1A2B5B,
+            0x1A3B15, 0x1A4986, 0x1A5EAC, 0x1A6513,
+            0x1A7AB1, 0x1C0552, 0x1DAAB5, 0x2223B6,
+            0x1A030A, 0x1A5827, 0x1A6ECC, 0x1BFE77,
+            0xE95875, 0xDC084D, 0xDCC9FE, 0xE593DF,
+            0x1BCE01, 0x1BDF14, 0x26F29B, 0x1A494D,
+            0x2E9A1D, 0x2F4904,
         };
 
 
-        inline uintptr_t remapCheck = 0x61192E; // this is necessary so we can even patch.
-        inline uintptr_t clientIntegrity = 0xDC9DAB; // patching secondview
-        inline uintptr_t processScan = 0xCF70D9;// Cheatengine, x64 Dbg, Scylla...
-        inline uintptr_t yaraCaller = 0x5DF3BB; // Ruleset-based detection for Modules
-        inline uintptr_t loadLock = 0x8608B8; // Block NtCreateSection for SEC_IMAGE
-        inline uintptr_t dllMainInitCallIntercept = 0xB31C40; // Instand detection of loaded module
-        inline uintptr_t controlFlowGuard = 0x855FA0; // Windows ControlFlowGuard. (RAX == ReturnAddr)
-        inline uintptr_t trampolineIntegrity = 0xE10EE7; // Hyperion's ntdll hook trampoline
-        inline uintptr_t consoleCheck = 0x681B1C; // Console Handle check
-        inline uintptr_t certificateCheck = 0xE2E879; // 1 == valid, 201 == WindowsDll
-        inline uintptr_t devious = 0xDCA45D;    // NEW !!!!!
+        inline uintptr_t remapCheck = 0xE4719F; // this is necessary so we can even patch.
+        inline uintptr_t clientIntegrity = 0x2AE365; // patching secondview
+        inline uintptr_t trampolineIntegrity = 0x35B19F; // Hyperion's ntdll hook trampoline
+        inline uintptr_t processScan = 0x1DCE02;// Cheatengine, x64 Dbg, Scylla...
+        inline uintptr_t yaraCaller = 0x16CBC1; // Ruleset-based detection for Modules
+        inline uintptr_t consoleCheck = 0xE03544; // Console Handle check
+        inline uintptr_t whitelist = 0x2EA7E6;  // executable to not executable
+        inline uintptr_t loadLock = 0xD4D1B4; // Block NtCreateSection for SEC_IMAGE
+        inline uintptr_t dllMainInitCallIntercept = 0x8484F0; // Instand detection of loaded module
+        inline uintptr_t controlFlowGuard = 0x56DFD0; // Windows ControlFlowGuard. (RAX == ReturnAddr)
+        inline uintptr_t certificateCheck = 0x3571BD; // 1 == valid, 201 == WindowsDll
         inline uintptr_t blockPageEncryption = 0xDAD74A;    // for second view hooking
-        inline uintptr_t whitelist = 0xD1C0B1;  // executable to not executable
     }
 
     inline std::vector<Patch> patches = {
 
         // INTEGRITY CHECKS 
-        {{Update::remapCheck}, {0x38, 0xC0, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90}},   // CMP AL, AL; NOP x8
+        {{Update::remapCheck}, {0x90, 0xE9}},                                                   // JMP <IMM64>
         {{Update::clientIntegrity}, {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}},                      // NOP x6
         {{Update::trampolineIntegrity}, {0xEB}},                                                // JMP SHORT
-        {{Update::devious}, {0x90, 0x90}},                                                      // NOP x2
-        {{Update::processScan}, {0x90, 0x90}},                                                  // NOP x2
+        {{Update::processScan}, {0x90, 0x90, 0x90}},                                            // NOP x3
         {{Update::yaraCaller}, {0x90, 0x90}},                                                   // NOP x2
+        {{Update::consoleCheck}, {0x38, 0xC0, 0x90, 0x90, 0x90}},                               // CMP AL, AL ; NOP x3
+        {{Update::whitelist}, {0x48, 0x31, 0xC9, 0x90, 0x90, 0x90, 0x90 } },                    // XOR RCX, RCX ; NOP x4
         {{Update::loadLock}, {0x90, 0xE9}},                                                     // JMP <IMM64>
         {{Update::dllMainInitCallIntercept}, {0xC3}},                                           // RET
         {{Update::controlFlowGuard}, {0xFF, 0xE0, 0xC3, 0x90, 0x90, 0x90, 0x90, 0x90}},         // JMP RAX
-        {{Update::consoleCheck}, {0x38, 0xC0, 0x90, 0x90, 0x90}},                               // CMP AL, AL ; NOP x3
-        {{Update::certificateCheck}, {0x90, 0xB1, 0x01}},                                       // MOV CL, 1
-        {{Update::blockPageEncryption}, {0x90, 0xE9}},                                          // JMP <IMM64>
-        {{Update::whitelist}, {0x48, 0x31, 0xC9, 0x90, 0x90, 0x90, 0x90 } },                    // XOR RCX, RCX ; NOP x4
-        // PATCH INTEGRITY
+        {{Update::certificateCheck}, {0x41, 0xB1, 0x01}},                                       // MOV R9B, 1
+        //{{Update::blockPageEncryption}, {0x90, 0xE9}},                                          // JMP <IMM64>
+
+        //// PATCH INTEGRITY
         {{Update::generalIntegrity}, {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}},                     // NOP x6
         {Update::subIntegrityJNZ, {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}},                        // NOP x6
         {Update::staticIntegritycj, {0xEB}},                                                    // JMP SHORT
