@@ -18,7 +18,7 @@ namespace Patches {
             0xD1552D, 0xD5AAEF, 0xDCD7DD,
             0xDAD7F4, 0xDDC388, 0xCE02CA,
             0xE643D5, 0xE65632, 0xE65F4B,
-            0xCF6F28, 0xDAC68E,
+            0xCF6F28, 0xDAC68E, 0xDC9CE7
         };
         inline std::vector<uintptr_t> staticIntegritycj = { // " why not all? " cuz we are patching function callers away which saves us alot
             0x4E76B4, 0x62702F, 0xE64453,
@@ -43,7 +43,8 @@ namespace Patches {
         inline uintptr_t consoleCheck = 0x681B1C; // Console Handle check
         inline uintptr_t certificateCheck = 0xE2E879; // 1 == valid, 201 == WindowsDll
         inline uintptr_t devious = 0xDCA45D;    // NEW !!!!!
-
+        inline uintptr_t blockPageEncryption = 0xDAD74A;    // for second view hooking
+        inline uintptr_t whitelist = 0xD1C0B1;  // executable to not executable
     }
 
     inline std::vector<Patch> patches = {
@@ -60,7 +61,8 @@ namespace Patches {
         {{Update::controlFlowGuard}, {0xFF, 0xE0, 0xC3, 0x90, 0x90, 0x90, 0x90, 0x90}},         // JMP RAX
         {{Update::consoleCheck}, {0x38, 0xC0, 0x90, 0x90, 0x90}},                               // CMP AL, AL ; NOP x3
         {{Update::certificateCheck}, {0x90, 0xB1, 0x01}},                                       // MOV CL, 1
-        
+        {{Update::blockPageEncryption}, {0x90, 0xE9}},                                          // JMP <IMM64>
+        {{Update::whitelist}, {0x48, 0x31, 0xC9, 0x90, 0x90, 0x90, 0x90 } },                    // XOR RCX, RCX ; NOP x4
         // PATCH INTEGRITY
         {{Update::generalIntegrity}, {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}},                     // NOP x6
         {Update::subIntegrityJNZ, {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}},                        // NOP x6
